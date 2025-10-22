@@ -1,26 +1,23 @@
-# só funciona o streamlit no vscode
-
 import streamlit as st
-#pip install streamlit
-
 import google.generativeai as genai
-#pip install google-generativeai
 
+# chave da API
 API_KEY = "AIzaSyAgHapNvvYUwTVP-GUuIr6Q7XIV6VCLivM"
 genai.configure(api_key=API_KEY)
 
-# modelo do gemini
+# inicia modelo do Gemini
 modelo = genai.GenerativeModel("gemini-2.5-flash")
-
-# Armazena o chat para melhores interações
-if "chat" not in st.session_state:
-    st.session_state.chat = modelo.start_chat(history=[])
-
 
 st.title("ChatBot com Gemini + Streamlit")
 
+# Entrada do usuário
 pergunta = st.text_input("Você:", "")
 
 if st.button("Enviar") and pergunta.strip() != "":
-    resposta = st.session_state.chat.send_message(pergunta)
+    # prompt para o modelo
+    prompt = f"Pergunta do usuário: {pergunta}"
+  # Gerando a resposta usando o modelo
+    resposta = modelo.generate_content(prompt)
+        
     st.markdown(f"**IA:** {resposta.text}")
+    
