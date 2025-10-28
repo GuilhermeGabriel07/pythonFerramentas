@@ -1,23 +1,20 @@
-import streamlit as st
 import google.generativeai as genai
+from datetime import date
+import streamlit as st
 
-# chave da API
+# Configuração da chave da API
 API_KEY = "AIzaSyAgHapNvvYUwTVP-GUuIr6Q7XIV6VCLivM"
 genai.configure(api_key=API_KEY)
 
-# inicia modelo do Gemini
+# Inicia o modelo do Gemini
 modelo = genai.GenerativeModel("gemini-2.5-flash")
-
 st.title("ChatBot com Gemini + Streamlit")
-
-# Entrada do usuário
-pergunta = st.text_input("Você:", "")
-
-if st.button("Enviar") and pergunta.strip() != "":
-    # prompt para o modelo
-    prompt = f"Pergunta do usuário: {pergunta}"
-  # Gerando a resposta usando o modelo
+pergunta = st.chat_input("Você: ")
+usuario = st.markdown(f'**Você**: {pergunta}')
+if  pergunta != 'cancelar':
+    
+    prompt = f"Hoje é dia {date.today()}. Pergunta do usuário: {pergunta}"
     resposta = modelo.generate_content(prompt)
-        
-    st.markdown(f"**IA:** {resposta.text}")
+    if resposta :
+     st.markdown(f"\r**IA:** {resposta.text}")
     
